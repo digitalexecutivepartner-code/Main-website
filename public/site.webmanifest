@@ -1,0 +1,12 @@
+{
+  "name": "Digital Executive Partner — Shopify Apps",
+  "short_name": "DEP Apps",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050818",
+  "theme_color": "#050818",
+  "icons": [
+    { "src": "/assets/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/assets/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

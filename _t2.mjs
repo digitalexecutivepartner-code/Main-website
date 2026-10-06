@@ -1,0 +1,11 @@
+import { readFileSync } from 'node:fs';
+import { neon } from '@neondatabase/serverless';
+const root = process.argv[2];
+const vars = Object.fromEntries(readFileSync(root+'/.dev.vars','utf8').split('\n').map(l=>l.match(/^\s*([A-Z0-9_]+)\s*=\s*"?(.*?)"?\s*$/)).filter(Boolean).map(m=>[m[1],m[2]]));
+const sql = neon(vars.DATABASE_URL); const q=(t,p=[])=>sql.query(t,p);
+const ddl = readFileSync(root+'/db/schema.sql','utf8'); const part = ddl.slice(ddl.indexOf('CREATE TABLE IF NOT EXISTS contact_submissions'));
+for (const s of part.split('\n').filter(l=>!l.trim().startsWith('--')).join('\n').split(';').map(s=>s.trim()).filter(Boolean)) await q(s);
+const { Contacts } = await import(root+'/src/db.js');
+console.log('counts', await Contacts.counts(q));
+console.log('list', await Contacts.list(q, {status:'', search:'test'}, {limit:20, offset:0}));
+console.log('list p2', await Contacts.list(q, {}, {limit:20, offset:20}));

@@ -1,0 +1,31 @@
+name = "crimson-cell-a959"
+main = "src/worker.js"
+compatibility_date = "2026-09-01"
+compatibility_flags = ["nodejs_compat"]
+
+routes = [
+  { pattern = "digitalexecutivepartner.app", custom_domain = true }
+]
+
+[assets]
+directory = "./public"
+binding = "ASSETS"
+not_found_handling = "404-page"
+run_worker_first = ["/*", "!/assets/*"]
+
+[vars]
+CONTACT_TO = "digitalexecutivepartner@gmail.com"
+
+# Image uploads from /admin (create once: npx wrangler r2 bucket create dep-media)
+[[r2_buckets]]
+binding = "MEDIA"
+bucket_name = "dep-media"
+
+# Global page cache shared by every Cloudflare data center (see src/cache.js).
+# No id needed: `wrangler deploy` creates the namespace on first deploy.
+[[kv_namespaces]]
+binding = "PAGE_CACHE"
+
+# SEO Agent Autopilot: 23:00 UTC = 06:00 Vietnam (scan → write → publish). Does nothing until switched on in Admin → SEO Agent.
+[triggers]
+crons = ["0 23 * * *"]
